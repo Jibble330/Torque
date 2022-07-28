@@ -1,4 +1,4 @@
-module example/Torque
+module example/Gravity
 
 go 1.18
 

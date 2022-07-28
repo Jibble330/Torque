@@ -18,15 +18,6 @@ var (
     imd *imdraw.IMDraw
 )
 
-type Line pixel.Line
-
-func (l Line) Draw() {
-    imd.Color = colornames.White
-    imd.Push(l.A)
-    imd.Push(l.B)
-    imd.Line(3)
-}
-
 func Closest(c pixel.Circle, p pixel.Vec) pixel.Vec {
     dif := p.Sub(c.Center)
     normalized := dif.Scaled(1/dif.Len())
@@ -61,7 +52,11 @@ func run() {
 
     Circle := pixel.C(win.Bounds().Center().Sub(pixel.V(150, 150)), 300)
     Point := AngleToPoint(Circle, 0)
-    Force := pixel.V(0, -1)
+    
+    Spring := Circle.Center.Add(pixel.V(0, 500))
+    MAX_LEN := Circle.Center.Add(pixel.V(300, 0)).Sub(Spring).Len()
+
+    Force := Point.Sub(Spring).Unit().Scaled(-1).Scaled(Point.Sub(Spring).Len()/MAX_LEN)
 
     dif := Point.Sub(Circle.Center)
     Tangent := dif.Normal().Scaled(1/dif.Normal().Len())
@@ -95,8 +90,10 @@ func run() {
                 Point = Closest(Circle, win.MousePosition())
             }
 
+            Force = Point.Sub(Spring).Unit().Scaled(-1).Scaled(Point.Sub(Spring).Len()/MAX_LEN)
+
             dif := Point.Sub(Circle.Center)
-            Tangent = dif.Normal().Scaled(1/dif.Normal().Len())
+            Tangent = dif.Normal().Unit()
             Torque = Tangent.Scaled(Tangent.Dot(Force))
         }
 
@@ -106,13 +103,19 @@ func run() {
         imd.Push(Point)
         imd.Circle(10, 0)
 
+        imd.Push(Spring)
+        imd.Circle(10, 0)
+
         imd.Color = colornames.Dimgray
         imd.Push(Point)
-        imd.Push(Point.Add(Force.Scaled(300)))
+        imd.Push(Spring)
         imd.Line(3)
 
         imd.Color = colornames.White
         imd.Push(Point)
+        imd.Circle(6, 0)
+
+        imd.Push(Spring)
         imd.Circle(6, 0)
         
 
