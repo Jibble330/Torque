@@ -68,7 +68,7 @@ func run() {
 
     dif := Point.Sub(Circle.Center)
     Tangent := dif.Normal().Scaled(1/dif.Normal().Len())
-    Torque := Tangent.Scaled(Tangent.Dot(Force)).Scaled(-1)
+    Torque := Tangent.Scaled(Tangent.Dot(Force))
 
     Atlas := text.NewAtlas(basicfont.Face7x13, text.ASCII)
     msg := text.New(pixel.V(500, 100), Atlas)
@@ -97,7 +97,7 @@ func run() {
 
             dif := Point.Sub(Circle.Center)
             Tangent = dif.Normal().Scaled(1/dif.Normal().Len())
-            Torque = Tangent.Scaled(Tangent.Dot(Force)).Scaled(-1)
+            Torque = Tangent.Scaled(Tangent.Dot(Force))
         }
 
         msg.WriteString(fmt.Sprint(math.Round(Torque.Len()*math.Pow(10, 5))/math.Pow(10, 5)))
