@@ -62,7 +62,7 @@ func run() {
     fps := time.NewTicker(time.Second/60)
     defer fps.Stop()
 
-    Circle := pixel.C(win.Bounds().Center(), 300)
+    Circle := pixel.C(win.Bounds().Center().Sub(pixel.V(150, 150)), 300)
     Point := AngleToPoint(Circle, 0)
     Force := pixel.V(0, -1)
 
@@ -85,6 +85,15 @@ func run() {
 
         if win.Pressed(pixelgl.MouseButtonLeft) && !win.MousePosition().Eq(Circle.Center) {
             Point = Closest(Circle, win.MousePosition())
+            Mouse := win.MousePosition()
+            if Mouse.X > Circle.Center.X && Mouse.Y < Circle.Center.Y {
+                Point = Circle.Center.Add(pixel.V(300, 0))
+            } else if Mouse.X < Circle.Center.X && Mouse.Y > Circle.Center.Y {
+                Point = Circle.Center.Add(pixel.V(0, 300))
+            } else if Mouse.X < Circle.Center.X && Mouse.Y < Circle.Center.Y {
+                Dif := Point.Sub(Circle.Center)
+                Point = pixel.V(-Dif.Y, -Dif.X).Add(Circle.Center)
+            }
 
             dif := Point.Sub(Circle.Center)
             Tangent = dif.Normal().Scaled(1/dif.Normal().Len())
@@ -108,7 +117,7 @@ func run() {
         
 
         imd.Push(Circle.Center)
-        imd.Circle(Circle.Radius, 3)
+        imd.CircleArc(Circle.Radius, 0, math.Pi/2, 3)
 
         imd.Push(Point)
         imd.Push(Point.Add(Torque.Scaled(300)))
