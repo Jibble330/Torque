@@ -117,7 +117,10 @@ func run() {
 
         imd.Push(Spring)
         imd.Circle(6, 0)
-        
+
+        imd.Push(Point)
+        imd.Push(Point.Add(Force.Scaled(300)))
+        imd.Line(5)
 
         imd.Push(Circle.Center)
         imd.CircleArc(Circle.Radius, 0, math.Pi/2, 3)
