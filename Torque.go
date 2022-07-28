@@ -84,15 +84,17 @@ func run() {
         }
 
         if win.Pressed(pixelgl.MouseButtonLeft) && !win.MousePosition().Eq(Circle.Center) {
-            Point = Closest(Circle, win.MousePosition())
             Mouse := win.MousePosition()
-            if Mouse.X > Circle.Center.X && Mouse.Y < Circle.Center.Y {
+            if Mouse.X >= Circle.Center.X && Mouse.Y <= Circle.Center.Y {
                 Point = Circle.Center.Add(pixel.V(300, 0))
-            } else if Mouse.X < Circle.Center.X && Mouse.Y > Circle.Center.Y {
+            } else if Mouse.X <= Circle.Center.X && Mouse.Y >= Circle.Center.Y {
                 Point = Circle.Center.Add(pixel.V(0, 300))
             } else if Mouse.X < Circle.Center.X && Mouse.Y < Circle.Center.Y {
+                Point = Closest(Circle, win.MousePosition())
                 Dif := Point.Sub(Circle.Center)
                 Point = pixel.V(-Dif.Y, -Dif.X).Add(Circle.Center)
+            } else {
+                Point = Closest(Circle, win.MousePosition())
             }
 
             dif := Point.Sub(Circle.Center)
