@@ -2,7 +2,6 @@ package main
 
 import (
     "math"
-    "time"
     "fmt"
     "image/color"
 
@@ -59,8 +58,6 @@ func run() {
     }
 
     imd = imdraw.New(nil)
-    fps := time.NewTicker(time.Second/60)
-    defer fps.Stop()
 
     Circle := pixel.C(win.Bounds().Center().Sub(pixel.V(150, 150)), 300)
     Point := AngleToPoint(Circle, 0)
@@ -75,6 +72,7 @@ func run() {
     msg.Orig = msg.BoundsOf(" ").Size().Scaled(5)
 
     for !win.Closed() {
+        
         win.Clear(colornames.Black)
         imd.Clear()
         msg.Clear()
@@ -128,7 +126,6 @@ func run() {
         msg.Draw(win, pixel.IM.Scaled(msg.Orig, 10))
         imd.Draw(win)
         win.Update()
-        <-fps.C
     }
 }
 
