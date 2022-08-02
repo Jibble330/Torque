@@ -14,7 +14,7 @@ const (
     MOTOR = 1.0/3.0
     LOAD = 1.0
     MA = LOAD/MOTOR
-    WEIGHT = 2
+    WEIGHT = 1
 )
 
 var (
